@@ -6,3 +6,5 @@ playlist = /home/sam/Phone/SD card/Music/playlist
 music = /home/sam/External/Music
 playlist = /home/sam/.config/cmus/playlist.pl
 
+[misc]
+keep_old_files = off 
