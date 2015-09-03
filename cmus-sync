@@ -163,7 +163,6 @@ if __name__=='__main__':
 	play_phone = config["phone"] ["playlist"]
 	source = config["source"] ["music"]
 	play_cmus = config["source"] ["playlist"]
-	#keep_old_files = config["misc"] ["keep_old_files"]
 	keep_old_files = config.getboolean("misc", "keep_old_files")
 
 	# prints the paths from the config file
