@@ -7,4 +7,4 @@ music = /home/sam/External/Music
 playlist = /home/sam/.config/cmus/playlist.pl
 
 [misc]
-keep_old_files = off 
+keep_old_files = False 
