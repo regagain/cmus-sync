@@ -8,7 +8,7 @@ import os
 import configparser
 from os.path import expanduser
 
-def cmus_sync(source, play_cmus, phone, play_phone):
+def cmus_sync(source, play_cmus, phone, play_phone, keep_old_files):
 	a = set()
 	b = set()
 	source_path = []
@@ -33,11 +33,15 @@ def cmus_sync(source, play_cmus, phone, play_phone):
 		path = pair[0]
 	# these items should be added to dest
 	add = a-b
-	# these items should be removed from dest
-	remove = b-a
+
+        # remove old files?
+	if keep_old_files is False:
+		# these items should be removed from dest
+		remove = b-a
 	
-	remove_songs(remove,phone,source_path)
-	add_songs(add,phone, source_path)
+		remove_songs(remove,phone,source_path)
+	
+	add_songs(add,phone,source_path)
 
 
 	shutil.copy(play_cmus,play_phone)
@@ -159,6 +163,7 @@ if __name__=='__main__':
 	play_phone = config["phone"] ["playlist"]
 	source = config["source"] ["music"]
 	play_cmus = config["source"] ["playlist"]
+	keep_old_files = config.getboolean("misc", "keep_old_files")
 
 	# prints the paths from the config file
 	print("\nSource: %s"%(source))
@@ -166,6 +171,6 @@ if __name__=='__main__':
 	print("Source playlist: %s"%(play_cmus))
 	print("Phone playlist: %s\n"%(play_phone))
 	
-	cmus_sync(source, play_cmus, phone, play_phone)
+	cmus_sync(source, play_cmus, phone, play_phone, keep_old_files)
 	#end time for program
 	print("--- %s seconds ---" % (round((time.time() - start_time),3)))
