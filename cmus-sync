@@ -9,10 +9,12 @@ import configparser
 from os.path import expanduser
 
 def cmus_sync(source, play_cmus, phone, play_phone, keep_old_files):
+
     a = set()
     b = set()
     source_path = []
     path = source
+
     # adds every element of the source playlist
     with open(play_cmus,"r") as source:
         for line in source:
@@ -38,11 +40,9 @@ def cmus_sync(source, play_cmus, phone, play_phone, keep_old_files):
     if keep_old_files is False:
         # these items should be removed from dest
         remove = b-a
-    
         remove_songs(remove, phone, source_path)
     
     add_songs(add, phone, source_path)
-
 
     shutil.copy(play_cmus, play_phone)
     
@@ -50,12 +50,13 @@ def remove_songs(remove, phone, source_path):
     
     # let the user know we're removing
     print("Removing...")
+
     # print the 0% progress, each '#' symbolises 2% 
     print("["+(" "*50)+"]"+" 0%   ",end='\r')
     
     if len(remove) != 0:
         # ppi = procent per item
-        ppi = (100/float(len(remove)))
+        ppi = 100/float(len(remove))
         # prp = progress procent
         prp = ppi    
         # remove the files
@@ -81,24 +82,24 @@ def remove_songs(remove, phone, source_path):
             else:
                 os.remove(phone_path)
                 path_elem.remove(path_elem[0])
-                phone_path = (posixpath.split(phone_path))[0]
+                phone_path = posixpath.split(phone_path)[0]
             # for all remaining elements(folders) check if its empty and
             # removes
             for i in path_elem:
                 if os.listdir(phone_path) == []:
                     os.rmdir(phone_path)
-                phone_path = (posixpath.split(phone_path))[0]
+                phone_path = posixpath.split(phone_path)[0]
                     
             # print current progress
-            print(("["+("#"*prog)+(" "*(50-prog))+"]"+" "+str(round(prp))+"%   "),end='\r')
+            print(("[" + ("#"*prog) + (" "*(50-prog)) + "]" + " " + str(round(prp)) + "%   "), end='\r')
             prp += ppi
 
     # print that we're done
-    print(("["+("#"*50)+"]"+" 100%   "))
+    print(("[" + ("#"*50) + "]" + " 100%   "))
     if len(remove) == 1:
-        print ("Done. Removed: %s song\n"%(len(remove)))
+        print ("Done. Removed: %s song\n" % len(remove))
     else:
-        print ("Done. Removed: %s songs\n"%(len(remove)))
+        print ("Done. Removed: %s songs\n" % len(remove))
 
 
 def add_songs(add, phone, source_path):
@@ -106,11 +107,11 @@ def add_songs(add, phone, source_path):
     # let the user know we're removing
     print("Adding...")
     # print the 0% progress, each '#' symbolises 2% 
-    print("["+(" "*50)+"]"+" 0%   ",end='\r')
+    print("[" + (" "*50) + "]" + " 0%   ", end='\r')
     
     if len(add) != 0:
         # ppi = procent per item
-        ppi = (100/float(len(add)))
+        ppi = 100/float(len(add))
         # prp = progress procent
         prp = ppi    
         # remove the files
@@ -141,35 +142,36 @@ def add_songs(add, phone, source_path):
             shutil.copy(item,phone_path)
         
             # print current progress
-            print(("["+("#"*prog)+(" "*(50-prog))+"]"+" "+str(round(prp))+"%   "),end='\r')
+            print(("[" + ("#"*prog) + (" "*(50-prog)) + "]" + " " + str(round(prp)) + "%   "), end='\r')
             prp += ppi
 
     # print that we're done
-    print(("["+("#"*50)+"]"+" 100%   "))
+    print("[" + ("#"*50) + "]" + " 100%   ")
     if len(add) == 1:
-        print ("Done. Added: %s song\n"%(len(add)))
+        print("Done. Added: %s song\n" % (len(add)))
     else:
-        print ("Done. Added: %s songs\n"%(len(add)))
+        print("Done. Added: %s songs\n" % (len(add)))
 
 if __name__=='__main__':
-    #start time for program
+
+    # start time for program
     start_time = time.time()    
     config = configparser.ConfigParser()
     home = expanduser("~")
 
-    config.read(home +"/"+ ".cmus-syncrc")
-    phone = config["phone"] ["music"]
-    play_phone = config["phone"] ["playlist"]
-    source = config["source"] ["music"]
-    play_cmus = config["source"] ["playlist"]
+    config.read(home + "/" + ".cmus-syncrc")
+    phone = config["phone"]["music"]
+    play_phone = config["phone"]["playlist"]
+    source = config["source"]["music"]
+    play_cmus = config["source"]["playlist"]
     keep_old_files = config.getboolean("misc", "keep_old_files")
 
     # prints the paths from the config file
-    print("\nSource: %s"%(source))
-    print("Music destination: %s"%(phone))
-    print("Source playlist: %s"%(play_cmus))
-    print("Phone playlist: %s\n"%(play_phone))
+    print("\nSource: %s" % (source))
+    print("Music destination: %s" % (phone))
+    print("Source playlist: %s" % (play_cmus))
+    print("Phone playlist: %s\n" % (play_phone))
     
     cmus_sync(source, play_cmus, phone, play_phone, keep_old_files)
-    #end time for program
+    # end time for program
     print("--- %s seconds ---" % (round((time.time() - start_time),3)))
