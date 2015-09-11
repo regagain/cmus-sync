@@ -34,19 +34,19 @@ def cmus_sync(source, play_cmus, phone, play_phone, keep_old_files):
     # these items should be added to dest
     add = a-b
 
-        # remove old files?
+    # remove old files?
     if keep_old_files is False:
         # these items should be removed from dest
         remove = b-a
     
-        remove_songs(remove,phone,source_path)
+        remove_songs(remove, phone, source_path)
     
-    add_songs(add,phone,source_path)
+    add_songs(add, phone, source_path)
 
 
-    shutil.copy(play_cmus,play_phone)
+    shutil.copy(play_cmus, play_phone)
     
-def remove_songs(remove,phone,source_path):
+def remove_songs(remove, phone, source_path):
     
     # let the user know we're removing
     print("Removing...")
@@ -81,7 +81,7 @@ def remove_songs(remove,phone,source_path):
             else:
                 os.remove(phone_path)
                 path_elem.remove(path_elem[0])
-                phone_path =(posixpath.split(phone_path))[0]
+                phone_path = (posixpath.split(phone_path))[0]
             # for all remaining elements(folders) check if its empty and
             # removes
             for i in path_elem:
@@ -140,7 +140,6 @@ def add_songs(add, phone, source_path):
             phone_path = phone_path + "/" + song
             shutil.copy(item,phone_path)
         
-    
             # print current progress
             print(("["+("#"*prog)+(" "*(50-prog))+"]"+" "+str(round(prp))+"%   "),end='\r')
             prp += ppi
